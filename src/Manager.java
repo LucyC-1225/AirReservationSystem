@@ -89,7 +89,7 @@ public class Manager {
         for (int i = 0; i < 8; i++) {
             number += (int) (Math.random() * 10) + "";
         }
-        return Integer.valueOf(number);
+        return Integer.parseInt(number);
     }
 
     //getter
