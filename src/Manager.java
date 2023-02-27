@@ -8,10 +8,10 @@ public class Manager {
         this.passenger = passenger;
         availableFlights = new ArrayList<Flight>();
         availableFlights.add(new Flight("New York", "Paris", "8:00", "15:00"));
-        availableFlights.add(new Flight("Paris", "Tokyo", "8:00", "15:00"));
-        availableFlights.add(new Flight("Tokyo", "Dakar", "8:00", "15:00"));
-        availableFlights.add(new Flight("Dakar", "Orlando", "8:00", "15:00"));
-        availableFlights.add(new Flight("Orlando", "New York", "8:00", "15:00"));
+        availableFlights.add(new Flight("Paris", "Tokyo", "18:00", "7:00"));
+        availableFlights.add(new Flight("Tokyo", "Dakar", "9:00", "4:00"));
+        availableFlights.add(new Flight("Dakar", "Orlando", "8:00", "19:00"));
+        availableFlights.add(new Flight("Orlando", "New York", "21:00", "0:00"));
     }
 
     public String viewPassengerInformation() {
@@ -30,7 +30,15 @@ public class Manager {
         }
         str += "Flights booked: \n";
         str += displayPassengerItinerary() + "\n";
-        //ADD CODE TO DISPLAY WHY ITINERARY IS NOT COMPLETE
+
+        Flight firstFlight = passenger.getItinerary().getFlightsList().get(0);
+        Flight lastFlight = passenger.getItinerary().getFlightsList().get(passenger.getItinerary().getFlightsList().size() - 1);
+
+        if (firstFlight.getDepartureLocation().equals(lastFlight.getDestinationLocation())) {
+            str += "\nItinerary Complete: Yes\n";
+        } else {
+            str += "\nItinerary Complete: No\n";
+        }
         return str;
     }
 
@@ -48,26 +56,28 @@ public class Manager {
         return str;
     }
 
-    // book flight, I didnt add conditions to check if user choice is valid
-    // TO DO
-    public void bookFlight(int flightIndex) {
+    public boolean bookFlight(int flightIndex) {
         // check how many flights are in itinerary
         int numFlightInItinerary = passenger.getItinerary().getFlightsList().size();
+        // flight the user chose
+        Flight userChoiceFlight = availableFlights.get(flightIndex);
         if (numFlightInItinerary == 0) {
             //here we are assuming the passenger is booking a departing flight
+            //book the flight
+            passenger.getItinerary().getFlightsList().add(availableFlights.get(flightIndex));
+            return true;
+        } else {
+            int sizeOfUserFlightList = passenger.getItinerary().getFlightsList().size() - 1;
+            Flight lastUserFlight = passenger.getItinerary().getFlightsList().get(sizeOfUserFlightList);
 
-        } else if (numFlightInItinerary == 1) {
-            //here we will ask if this is a departing or return flight
-            //Ill assume that this is a connection for a departing flight BUT THIS IS WRONG
-
-        } else if (numFlightInItinerary == 2) {
-            //here we are assuming the passenger is booking a return flight
-
-        } else if (numFlightInItinerary == 3) {
-            //here we are assuming the passenger is booking a connection for return flight
-
+            if (lastUserFlight.getDestinationLocation().equals(userChoiceFlight.getDepartureLocation())) {
+                // book the flight
+                passenger.getItinerary().getFlightsList().add(availableFlights.get(flightIndex));
+                return true;
+            } else {
+                return false;
+            }
         }
-        passenger.getItinerary().getFlightsList().add(availableFlights.get(flightIndex));
     }
 
     public String displayAllAvailableFlights() {

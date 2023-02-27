@@ -31,6 +31,7 @@ public class Main {
                 System.out.println("Creating membership....");
                 m.createMembership();
                 System.out.println("Membership created! Your unique membership number is " + m.getPassenger().getMembershipNum());
+                System.out.println("Congrats, you got 25,000 bonus miles!");
 
                 System.out.println("Click enter to continue");
                 sc.nextLine();
@@ -40,8 +41,13 @@ public class Main {
                 System.out.print("Choice: ");
                 String choice = sc.nextLine();
                 if (!choice.equals("-1")) {
-                    m.bookFlight(Integer.parseInt(choice) - 1);
-                    System.out.println("Flight from " + m.getAvailableFlights().get(Integer.parseInt(choice) - 1).getDepartureLocation() + " to " + m.getAvailableFlights().get(Integer.parseInt(choice) - 1).getDestinationLocation() + " is booked");
+                    String flightStr = "Flight from " + m.getAvailableFlights().get(Integer.parseInt(choice) - 1).getDepartureLocation() + " to " + m.getAvailableFlights().get(Integer.parseInt(choice) - 1).getDestinationLocation();
+                    // if booking flight not successful
+                    if (m.bookFlight(Integer.parseInt(choice) - 1)) {
+                        System.out.println(flightStr + " is booked");
+                    } else {
+                        System.out.println(flightStr + " unsuccessfully booked");
+                    }
                 }
                 System.out.println("Click enter to continue");
                 sc.nextLine();
